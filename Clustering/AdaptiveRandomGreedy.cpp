@@ -134,9 +134,12 @@ void AdaptiveRandomGreedy::Init(Partition *partition)
 
 vector<pair<int, int>> *AdaptiveRandomGreedy::PerformJoins(double &q, int &best_step)
 {
+	//int beta = 1000 * f_(1, 2) / (10 * log(2));
 
-	ofstream fout(cumulative_ ? "Results/cumulative_adaptive_greedy.txt" : "Results/adaptive_greedy.txt");
-	//high_resolution_clock::time_point t1 = high_resolution_clock::now();
+	//char name[50];
+	//sprintf_s(name, "%s%d%s", "Results/adaptive", beta, ".csv");
+	//ofstream fout("Results/noncumulative.csv");
+	//fout << "step;k;mu;f\n";
 
 	vector<pair<int, int> > *joins = new vector<pair<int, int> >();
 	best_step = -1;
@@ -168,17 +171,17 @@ vector<pair<int, int>> *AdaptiveRandomGreedy::PerformJoins(double &q, int &best_
 			if (now_plus)
 			{
 				f_plus = f_(median, k_current);
-				fout << step << ";" << k_current << ";" << median << ";" <<
-					delta_qs[0] << ";" << delta_qs[s_ - 1] << ";" << f_plus //<< "; " <<
+				//fout << step << ";" << k_current << ";" << median << ";"
+					//<< f_plus //<< "; " <<
 					//duration_cast<std::chrono::milliseconds>
 					//(high_resolution_clock::now() - t1).count() / 1000.0f 
-					<< endl;
+					//<< endl;
 
 				if (cumulative_)
 				{
 					steps_made++;
 					k0 = (int)round(max(1.0,
-						(steps_made * k_current - (f_plus - f_minus) / d2)
+						(steps_made * k0 - (f_plus - f_minus) / d2)
 						/ (double)steps_made)
 						);
 				}
@@ -193,11 +196,11 @@ vector<pair<int, int>> *AdaptiveRandomGreedy::PerformJoins(double &q, int &best_
 			else
 			{
 				f_minus = f_(median, k_current);
-				fout << step << ";" << k_current << ";" << median << ";" <<
-					delta_qs[0] << ";" << delta_qs[s_ - 1] << ";" << f_minus //<< ";" <<
+				//fout << step << ";" << k_current << ";" << median << ";"
+					//<< f_minus //<< ";" <<
 					//duration_cast<std::chrono::milliseconds>
 					//(high_resolution_clock::now() - t1).count() / 1000.0f
-					<< endl;
+					//<< endl;
 
 				k_current = k0 + d_;
 				now_plus = true;
@@ -234,7 +237,7 @@ vector<pair<int, int>> *AdaptiveRandomGreedy::PerformJoins(double &q, int &best_
 	}
 
 	q = best_q;
-	fout.close();
+	//fout.close();
 	return joins;
 }
 

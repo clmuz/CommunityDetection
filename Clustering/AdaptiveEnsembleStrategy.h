@@ -12,9 +12,10 @@ public:
 
 	AdaptiveEnsembleStrategy(
 		int d,
-		std::function<double(double q)> f,
+		std::function<double(double q, int k)> f,
 		int k0,
 		int l,
+		double r,
 		ClusteringInterface *final_algorithm);
 	~AdaptiveEnsembleStrategy();
 
@@ -25,9 +26,10 @@ public:
 private:
 
 	int d_;
-	std::function<double(double q)> f_;
+	std::function<double(double q, int k)> f_;
 	int k0_;
 	int l_;
+	double r_;
 	ClusteringInterface *final_algorithm_;
 
 };
